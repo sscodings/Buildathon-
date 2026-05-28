@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_SERVER_DOMAIN || "http://localhost:3000";
+const BASE_URL = import.meta.env.VITE_SERVER_DOMAIN || "https://buildathon-ngo.onrender.com";
 
 import { authHeaders, getToken } from "./session";
 
