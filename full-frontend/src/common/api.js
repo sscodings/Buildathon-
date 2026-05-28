@@ -2,6 +2,13 @@ const BASE_URL = (typeof process !== "undefined" && process.env && process.env.N
 
 import { authHeaders, getToken } from "./session";
 
+// Helper to normalize URL and prevent issues like double slashes (e.g. if BASE_URL ends with / and path starts with /)
+const getUrl = (path) => {
+  const base = BASE_URL.trim().replace(/\/$/, "");
+  const cleanPath = path.trim().replace(/^\//, "");
+  return `${base}/${cleanPath}`;
+};
+
 // Helper: parse response and throw a descriptive error if not ok
 async function handleResponse(res) {
   let data;
@@ -23,7 +30,7 @@ async function handleResponse(res) {
 
 export const api = {
   post: async (path, body) => {
-    const res = await fetch(`${BASE_URL}${path}`, {
+    const res = await fetch(getUrl(path), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -32,7 +39,7 @@ export const api = {
   },
 
   authPost: async (path, body, method = "POST") => {
-    const res = await fetch(`${BASE_URL}${path}`, {
+    const res = await fetch(getUrl(path), {
       method,
       headers: authHeaders(),
       body: JSON.stringify(body),
@@ -41,17 +48,18 @@ export const api = {
   },
 
   get: async (path) => {
-    const res = await fetch(`${BASE_URL}${path}`, {
+    const res = await fetch(getUrl(path), {
       headers: authHeaders(),
     });
     return handleResponse(res);
   },
 
   delete: async (path) => {
-    const res = await fetch(`${BASE_URL}${path}`, {
+    const res = await fetch(getUrl(path), {
       method: "DELETE",
       headers: authHeaders(),
     });
     return handleResponse(res);
   },
 };
+
