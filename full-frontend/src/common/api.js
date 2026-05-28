@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_SERVER_DOMAIN || "https://buildathon-ngo.onrender.com";
+const BASE_URL = (typeof process !== "undefined" && process.env && process.env.NEXT_PUBLIC_API_URL) || import.meta.env.VITE_SERVER_DOMAIN || "https://buildathon-ngo.onrender.com";
 
 import { authHeaders, getToken } from "./session";
 
